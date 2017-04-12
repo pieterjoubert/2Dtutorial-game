@@ -5,6 +5,9 @@ using UnityEngine;
 public class CharacterController : MonoBehaviour {
 
     public Rigidbody2D rb;
+    public Camera camera;
+    public bool followCharacter;
+    public AudioClip coinCollect;
     private bool airborne = false;
     public float thrust;
     public float maxVelocity;
@@ -32,34 +35,47 @@ public class CharacterController : MonoBehaviour {
             
            
         }
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.UpArrow))
         {
             rb = GetComponent<Rigidbody2D>();
             if (!airborne && Mathf.Abs(rb.velocity.y) < maxVelocity)
             {
-                rb.AddForce(transform.up * thrust * 20f);
+                rb.AddForce(transform.up * thrust * 30f);
                 airborne = true;
             }
         }
 
-        
+        if (followCharacter)
+        {
+            Vector3 newPos = new Vector3(this.transform.position.x, this.transform.position.y, -10);
+            camera.transform.position = newPos;
+        }
+
     }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.tag == "platform")
-           airborne = false;
-
-        if (coll.gameObject.tag == "ramp")
+        {
+            airborne = false;
+        }
+        else if (coll.gameObject.tag == "ramp")
         {
             rb = GetComponent<Rigidbody2D>();
             if (Mathf.Abs(rb.velocity.y) < maxVelocity)
-                rb.AddForce(transform.up * thrust * 40f);
-           
+                rb.AddForce(transform.up * thrust * 50f);
+            airborne = true;
         }
+        
 
+    }
+
+    void OnTriggerEnter2D(Collider2D coll)
+    {
+        Debug.Log(coll.gameObject.tag);
         if (coll.gameObject.tag == "coin")
         {
+            AudioSource.PlayClipAtPoint(coinCollect, transform.position);
             Destroy(coll.gameObject);
         }
     }
