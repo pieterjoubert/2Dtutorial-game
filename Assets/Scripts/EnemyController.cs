@@ -8,6 +8,7 @@ public class EnemyController : MonoBehaviour {
     public GameObject eastWP;
     private float speed = 2f; 
     private float direction = 1f; // direction starts east;
+    public AudioClip death;
 
     // Use this for initialization
     void Start () {
@@ -38,7 +39,8 @@ public class EnemyController : MonoBehaviour {
     {
         if (coll.gameObject.tag == "character")
         {
-            Debug.Log("death");
+           
+            AudioSource.PlayClipAtPoint(death, transform.position);
             Destroy(coll.gameObject);
         }
     }

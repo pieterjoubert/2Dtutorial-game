@@ -11,6 +11,7 @@ public class CharacterController : MonoBehaviour {
     private bool airborne = false;
     public float thrust;
     public float maxVelocity;
+    private int direction = 0; //0 = facing east
 
     // Use this for initialization
     void Start () {
@@ -25,15 +26,26 @@ public class CharacterController : MonoBehaviour {
             rb = GetComponent<Rigidbody2D>();
             if(Mathf.Abs(rb.velocity.x) < maxVelocity)
                 rb.AddForce(transform.right * thrust);
-         
+
+            if(direction == 1)
+            {
+                SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                sr.flipX = false;
+            }
+            direction = 0;
         }
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             rb = GetComponent<Rigidbody2D>();
             if (Mathf.Abs(rb.velocity.x) < maxVelocity)
                 rb.AddForce(transform.right * -thrust);
-            
-           
+            if (direction == 0)
+            {
+                SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                sr.flipX = true;
+            }
+            direction = 1;
+
         }
         if (Input.GetKey(KeyCode.UpArrow))
         {
@@ -72,7 +84,7 @@ public class CharacterController : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D coll)
     {
-        Debug.Log(coll.gameObject.tag);
+    
         if (coll.gameObject.tag == "coin")
         {
             AudioSource.PlayClipAtPoint(coinCollect, transform.position);
