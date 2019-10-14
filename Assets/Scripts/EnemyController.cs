@@ -18,9 +18,6 @@ public class EnemyController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-       /* transform.position = new Vector3(
-            Mathf.PingPong(Time.time * speed, eastWP.transform.position.x * 2) + westWP.transform.position.x,
-            transform.position.y, transform.position.z);*/
         
             transform.position = new Vector3((Time.deltaTime * speed * direction) + transform.position.x , transform.position.y, transform.position.z);
 
@@ -32,14 +29,12 @@ public class EnemyController : MonoBehaviour {
             {
                 direction = 1f;
             }
-
     }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
         if (coll.gameObject.tag == "character")
         {
-           
             AudioSource.PlayClipAtPoint(death, transform.position);
             Destroy(coll.gameObject);
         }
