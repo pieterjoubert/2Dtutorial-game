@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class CharacterController : MonoBehaviour {
 
@@ -11,7 +12,9 @@ public class CharacterController : MonoBehaviour {
     private bool airborne = false;
     public float thrust;
     public float maxVelocity;
+    public TextMeshProUGUI txtCoins;
     private int direction = 0; //0 = facing east
+    private int coins = 0;
 
     // Use this for initialization
     void Start () {
@@ -62,7 +65,7 @@ public class CharacterController : MonoBehaviour {
             Vector3 newPos = new Vector3(this.transform.position.x, this.transform.position.y, -10);
             camera.transform.position = newPos;
         }
-
+        txtCoins.text = coins.ToString();
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -89,6 +92,7 @@ public class CharacterController : MonoBehaviour {
         {
             AudioSource.PlayClipAtPoint(coinCollect, transform.position);
             Destroy(coll.gameObject);
+            coins++;
         }
     }
 }
